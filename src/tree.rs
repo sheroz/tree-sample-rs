@@ -73,20 +73,20 @@ impl Tree {
         }
         count
     }
-
-    pub fn flatten(&self) -> Vec<TreeNodeRef> {
-        let mut flatten = Vec::<TreeNodeRef>::new();
+    pub fn search(&self, uuid: Uuid) -> Option<TreeNodeRef> {
         if let Some(node) = &self.root {
             let mut queue = VecDeque::<TreeNodeRef>::from([node.clone()]);
             while let Some(node) = queue.pop_front() {
-                flatten.push(node.clone());
+                if uuid == node.as_ref().borrow().uuid {
+                    return Some(node.clone());
+                }
                 let children_ref = node.as_ref().borrow();
                 if let Some(children) = children_ref.children.as_ref() {
                     children.iter().for_each(|v| queue.push_back(v.clone()));
                 }
             }
         }
-        flatten
+        None
     }
 
     pub fn remove(&mut self, uuid: Uuid) -> Option<TreeNodeRef> {
@@ -116,20 +116,19 @@ impl Tree {
         None
     }
 
-    pub fn search(&self, uuid: Uuid) -> Option<TreeNodeRef> {
+    pub fn flatten(&self) -> Vec<TreeNodeRef> {
+        let mut flatten = Vec::<TreeNodeRef>::new();
         if let Some(node) = &self.root {
             let mut queue = VecDeque::<TreeNodeRef>::from([node.clone()]);
             while let Some(node) = queue.pop_front() {
-                if uuid == node.as_ref().borrow().uuid {
-                    return Some(node.clone());
-                }
+                flatten.push(node.clone());
                 let children_ref = node.as_ref().borrow();
                 if let Some(children) = children_ref.children.as_ref() {
                     children.iter().for_each(|v| queue.push_back(v.clone()));
                 }
             }
         }
-        None
+        flatten
     }
 }
 
@@ -194,24 +193,6 @@ mod tests {
     }
 
     #[test]
-    fn flatten() {
-        let tree = populate();
-        let flatten = tree.flatten();
-        assert_eq!(flatten.len(), 7);
-        let out = flatten
-            .iter()
-            .map(|v| {
-                format!(
-                    "{}:{}",
-                    v.as_ref().borrow().uuid.to_string(),
-                    v.as_ref().borrow().text.clone()
-                )
-            })
-            .collect::<Vec<_>>();
-        println!("{}", out.join("\n"));
-    }
-
-    #[test]
     fn search_empty() {
         let tree = Tree::new();
         let uuid = Uuid::new_v4();
@@ -245,6 +226,24 @@ mod tests {
             v.as_ref().borrow().text.clone()
         );
         println!("Found:\n{}", out);
+    }
+
+    #[test]
+    fn flatten() {
+        let tree = populate();
+        let flatten = tree.flatten();
+        assert_eq!(flatten.len(), 7);
+        let out = flatten
+            .iter()
+            .map(|v| {
+                format!(
+                    "{}:{}",
+                    v.as_ref().borrow().uuid.to_string(),
+                    v.as_ref().borrow().text.clone()
+                )
+            })
+            .collect::<Vec<_>>();
+        println!("{}", out.join("\n"));
     }
 
     #[test]

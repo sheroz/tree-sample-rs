@@ -1,6 +1,4 @@
-mod tree;
-
-use tree::{Tree, TreeNode, TreeNodeRef, TreeNodeRefBuild};
+use tree_sample_rs::tree::{Tree, TreeNode, TreeNodeRef, TreeNodeRefBuild};
 
 pub fn main() {
     let mut tree = Tree::new();
