@@ -28,7 +28,7 @@ pub type TreeNodeRef = Rc<RefCell<TreeNode>>;
 - remove
 - flatten
 
-### Please look at tests in [src/tree.rs](src/tree.rs) for more details
+Please look at tests in [src/tree.rs](src/tree.rs) for more details
 
 ## Useful insights
 
