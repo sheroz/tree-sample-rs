@@ -29,3 +29,7 @@ pub type TreeNodeRef = Rc<RefCell<TreeNode>>;
 - flatten
 
 ### Please look at tests in [src/tree.rs](src/tree.rs) for more details
+
+## Useful insights
+
+- [Learn Rust by writing Entirely Too Many Linked Lists](https://github.com/rust-unofficial/too-many-lists)
