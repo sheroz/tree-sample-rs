@@ -32,4 +32,4 @@ pub type TreeNodeRef = Rc<RefCell<TreeNode>>;
 
 ## Useful insights
 
-- [Learn Rust by writing Entirely Too Many Linked Lists](https://github.com/rust-unofficial/too-many-lists)
+- [Learn Rust With Entirely Too Many Linked Lists](https://rust-unofficial.github.io/too-many-lists/)
