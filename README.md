@@ -1,4 +1,6 @@
-# A sample tree and parent-child relationship in Rust
+# Tree and parent-child relationship in Rust
+
+Tree and parent-child relationship samples for learning purposes.
 
 ## Tree structure
 
