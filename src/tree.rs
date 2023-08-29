@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::collections::VecDeque;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use uuid::Uuid;
 
 #[derive(Debug)]
@@ -13,11 +13,12 @@ pub struct TreeNode {
     pub uuid: Uuid,
     pub number: u32,
     pub text: String,
-    pub parent: Option<TreeNodeRef>,
+    pub parent: TreeNodeWeakRef,
     pub children: Option<Vec<TreeNodeRef>>,
 }
 
 pub type TreeNodeRef = Rc<RefCell<TreeNode>>;
+pub type TreeNodeWeakRef = Weak<RefCell<TreeNode>>;
 
 pub trait TreeNodeRefBuild {
     fn build_from(item: TreeNode) -> TreeNodeRef;
@@ -35,7 +36,7 @@ impl TreeNode {
             uuid: Uuid::new_v4(),
             number: 0,
             text: "".to_string(),
-            parent: None,
+            parent: Weak::new(),
             children: None,
         }
     }
@@ -47,7 +48,7 @@ impl Tree {
     }
 
     pub fn add_child(&self, parent: TreeNodeRef, child: TreeNodeRef) {
-        child.as_ref().borrow_mut().parent = Some(parent.clone());
+        child.as_ref().borrow_mut().parent = Rc::downgrade(&parent);
         let mut node = parent.as_ref().borrow_mut();
         match node.children.as_mut() {
             Some(children) => {
@@ -91,7 +92,7 @@ impl Tree {
 
     pub fn remove(&mut self, uuid: Uuid) -> Option<TreeNodeRef> {
         if let Some(node) = self.search(uuid) {
-            match node.as_ref().borrow().parent.as_ref() {
+            match node.as_ref().borrow().parent.upgrade() {
                 Some(parent_ref) => {
                     let parent = parent_ref.as_ref();
                     if let Some(children) = parent.borrow_mut().children.as_mut() {
