@@ -14,11 +14,12 @@ pub struct TreeNode {
     pub uuid: Uuid,
     pub number: u32,
     pub text: String,
-    pub parent: Option<TreeNodeRef>,
+    pub parent: TreeNodeWeakRef,
     pub children: Option<Vec<TreeNodeRef>>,
 }
 
 pub type TreeNodeRef = Rc<RefCell<TreeNode>>;
+pub type TreeNodeWeakRef = Weak<RefCell<TreeNode>>;
 ```
 
 ## Sample methods
