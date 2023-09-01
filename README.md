@@ -1,8 +1,14 @@
 # Tree and parent-child relationship in Rust
 
-Tree and parent-child relationship samples for learning purposes.
+Tree and parent-child relationship samples for learning purposes
 
-## Tree structure
+Samples included:
+
+- Generic Tree
+- Binary Tree
+- Binary Search Tree
+
+## Generic Tree
 
 ```rust
 
@@ -31,8 +37,9 @@ pub type TreeNodeWeakRef = Weak<RefCell<TreeNode>>;
 - remove
 - flatten
 
-Please look at tests in [src/tree.rs](src/tree.rs) for more details
+Please look at tests in [src/generic_tree.rs](src/generic_tree.rs) for more details
 
 ## Useful insights
 
 - [Learn Rust With Entirely Too Many Linked Lists](https://rust-unofficial.github.io/too-many-lists/)
+- [Tree Data Structure](https://www.programiz.com/dsa/trees)
