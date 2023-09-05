@@ -7,3 +7,10 @@ edition = "2021"
 
 [dependencies]
 uuid = { version = "1.4.1", features = ["v4"] }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "bst_benches"
+harness = false

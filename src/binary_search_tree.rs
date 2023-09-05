@@ -216,7 +216,7 @@ impl BinarySearchTree {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::binary_tree::test_utils::*;
+    use crate::binary_tree::utils::*;
     
     #[test]
     fn insert_recursion() {
