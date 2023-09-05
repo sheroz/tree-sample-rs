@@ -195,8 +195,7 @@ impl BinaryTree {
     }
 }
 
-#[cfg(test)]
-pub mod test_utils {
+pub mod utils {
 
     use super::*;
     pub const NODES_COUNT: usize = 15;
@@ -275,7 +274,7 @@ pub mod test_utils {
 mod tests {
     use std::collections::HashMap;
 
-    use crate::binary_tree::{test_utils::*, BinaryTree};
+    use crate::binary_tree::{utils::*, BinaryTree};
 
     #[test]
     fn populate_node_ref_list_test() {
