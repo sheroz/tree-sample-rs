@@ -18,7 +18,7 @@ impl BinarySearchTree {
         new_node_ref: &BinaryTreeNodeRef,
     ) -> Option<BinaryTreeNodeRef> {
         match node {
-            None => return Some(new_node_ref.clone()),
+            None => Some(new_node_ref.clone()),
             Some(node_ref) => {
                 let mut parent = None;
                 if node_ref.borrow().data > new_node_ref.borrow().data {
@@ -34,10 +34,10 @@ impl BinarySearchTree {
                     }
                     node_ref.borrow_mut().right = Self::insert_recursion(right, new_node_ref);
                 }
-                if parent.is_some() {
-                    new_node_ref.borrow_mut().parent = parent.unwrap();
+                if let Some(p) = parent {
+                    new_node_ref.borrow_mut().parent = p;
                 }
-                return Some(node_ref);
+                Some(node_ref)
             }
         }
     }
@@ -63,7 +63,7 @@ impl BinarySearchTree {
         }
         else {
             let node_ref = insert_node.as_ref().unwrap();
-            new_node.borrow_mut().parent = Rc::downgrade(&node_ref);
+            new_node.borrow_mut().parent = Rc::downgrade(node_ref);
             let mut node = node_ref.borrow_mut();
             if new_node.borrow().data < node.data {
                 node.left = Some(new_node.clone());
@@ -72,7 +72,7 @@ impl BinarySearchTree {
                 node.right = Some(new_node.clone());
             }
         }
-        return insert_node;
+        insert_node
     }
 
     pub fn is_binary_search_tree(node: &BinaryTreeNodeRef) -> bool {
@@ -80,9 +80,7 @@ impl BinarySearchTree {
     }
 
     pub fn search(&self, data: u32) -> Option<BinaryTreeNodeRef> {
-        if self.tree.root.is_none() {
-            return None;
-        }
+        self.tree.root.as_ref()?;
 
         let node = self.tree.root.as_ref().unwrap();
 
@@ -101,10 +99,8 @@ impl BinarySearchTree {
                 if let Some(left) = n.left.as_ref() {
                     queue.push_back(left.clone());
                 }
-            } else {
-                if let Some(right) = n.right.as_ref() {
-                    queue.push_back(right.clone());
-                }
+            } else if let Some(right) = n.right.as_ref() {
+                queue.push_back(right.clone());
             }
         }
         None

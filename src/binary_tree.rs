@@ -188,10 +188,7 @@ impl BinaryTree {
     }
 
     fn get_node_id(v: &Option<BinaryTreeNodeRef>) -> Option<Uuid> {
-        match v {
-            Some(node) => Some(node.borrow().id),
-            None => None,
-        }
+        v.as_ref().map(|node| node.borrow().id)
     }
 }
 
