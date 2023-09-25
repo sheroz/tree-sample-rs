@@ -30,6 +30,12 @@ impl TreeNodeRefBuild for TreeNodeRef {
     }
 }
 
+impl Default for TreeNode {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TreeNode {
     pub fn new() -> Self {
         TreeNode {
@@ -39,6 +45,12 @@ impl TreeNode {
             parent: Weak::new(),
             children: None,
         }
+    }
+}
+
+impl Default for Tree {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -215,7 +227,7 @@ mod tests {
         let flatten = tree.flatten();
         let node_ref = flatten[2].as_ref();
         let uuid = node_ref.borrow().uuid;
-        println!("Looking for:\n{}", uuid.to_string());
+        println!("Looking for:\n{}", uuid);
 
         let r = tree.search(uuid);
         assert!(r.is_some());
@@ -223,7 +235,7 @@ mod tests {
         let v = r.unwrap();
         let out = format!(
             "{}:{}",
-            v.as_ref().borrow().uuid.to_string(),
+            v.as_ref().borrow().uuid,
             v.as_ref().borrow().text.clone()
         );
         println!("Found:\n{}", out);
@@ -239,7 +251,7 @@ mod tests {
             .map(|v| {
                 format!(
                     "{}:{}",
-                    v.as_ref().borrow().uuid.to_string(),
+                    v.as_ref().borrow().uuid,
                     v.as_ref().borrow().text.clone()
                 )
             })
@@ -283,7 +295,7 @@ mod tests {
             .map(|v| {
                 format!(
                     "{}:{}",
-                    v.as_ref().borrow().uuid.to_string(),
+                    v.as_ref().borrow().uuid,
                     v.as_ref().borrow().text.clone()
                 )
             })
@@ -292,14 +304,14 @@ mod tests {
 
         let node_ref = flatten[4].as_ref();
         let uuid = node_ref.borrow().uuid;
-        println!("Looking for:\n{}", uuid.to_string());
+        println!("Looking for:\n{}", uuid);
         let removed = tree.remove(uuid);
         assert!(removed.is_some());
 
         let v = removed.unwrap();
         let out = format!(
             "{}:{}",
-            v.as_ref().borrow().uuid.to_string(),
+            v.as_ref().borrow().uuid,
             v.as_ref().borrow().text.clone()
         );
         println!("Removed:\n{}", out);
@@ -310,7 +322,7 @@ mod tests {
             .map(|v| {
                 format!(
                     "{}:{}",
-                    v.as_ref().borrow().uuid.to_string(),
+                    v.as_ref().borrow().uuid,
                     v.as_ref().borrow().text.clone()
                 )
             })
