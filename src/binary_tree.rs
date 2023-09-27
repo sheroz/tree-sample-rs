@@ -165,7 +165,7 @@ impl BinaryTree {
                 right.borrow_mut().parent = Rc::downgrade(&node);
                 queue.push_back(right.clone());
             }
-        }  
+        }
     }
 
     pub fn leftmost(node_ref: &BinaryTreeNodeRef) -> Option<BinaryTreeNodeRef> {
@@ -189,6 +189,42 @@ impl BinaryTree {
 
     fn get_node_id(v: &Option<BinaryTreeNodeRef>) -> Option<Uuid> {
         v.as_ref().map(|node| node.borrow().id)
+    }
+
+    pub fn invert_recursive(node_ref: BinaryTreeNodeRef) {
+        let mut node = node_ref.borrow_mut();
+
+        if let Some(right) = node.right.clone() {
+            Self::invert_recursive(right);
+        }
+        if let Some(left) = node.left.clone() {
+            Self::invert_recursive(left);
+        }
+
+        // swap child nodes
+        let tmp = node.right.clone();
+        node.right = node.left.clone();
+        node.left = tmp;
+    }
+
+    pub fn invert_iterative(root_ref: BinaryTreeNodeRef) {
+        let mut queue = VecDeque::new();
+        queue.push_back(root_ref);
+        while let Some(node_ref) = queue.pop_front() {
+            let mut node = node_ref.borrow_mut();
+
+            if let Some(right) = node.right.clone() {
+                queue.push_back(right);
+            }
+            if let Some(left) = node.left.clone() {
+                queue.push_back(left);
+            }
+
+            // swap child nodes
+            let tmp = node.right.clone();
+            node.right = node.left.clone();
+            node.left = tmp;
+        }
     }
 }
 
@@ -484,6 +520,46 @@ mod tests {
         ];
 
         let root = populate_balanced_binary_tree();
+        let flatten_nodes: Vec<_> = BinaryTree::flatten_inorder(root.clone());
+        assert_eq!(flatten_nodes.len(), expected.len());
+
+        let flatten_names: Vec<_> = flatten_nodes
+            .iter()
+            .map(|n| n.borrow().name.clone())
+            .collect();
+        assert_eq!(flatten_names, expected);
+    }
+
+    #[test]
+    fn invert_recursive() {
+        let expected = [
+            "n14", "n6", "n13", "n2", "n12", "n5", "n11", "n0", "n10", "n4", "n9", "n1", "n8",
+            "n3", "n7",
+        ];
+
+        let root = populate_balanced_binary_tree();
+        BinaryTree::invert_recursive(root.clone());
+
+        let flatten_nodes: Vec<_> = BinaryTree::flatten_inorder(root.clone());
+        assert_eq!(flatten_nodes.len(), expected.len());
+
+        let flatten_names: Vec<_> = flatten_nodes
+            .iter()
+            .map(|n| n.borrow().name.clone())
+            .collect();
+        assert_eq!(flatten_names, expected);
+    }
+
+    #[test]
+    fn invert_iterative() {
+        let expected = [
+            "n14", "n6", "n13", "n2", "n12", "n5", "n11", "n0", "n10", "n4", "n9", "n1", "n8",
+            "n3", "n7",
+        ];
+
+        let root = populate_balanced_binary_tree();
+        BinaryTree::invert_iterative(root.clone());
+
         let flatten_nodes: Vec<_> = BinaryTree::flatten_inorder(root.clone());
         assert_eq!(flatten_nodes.len(), expected.len());
 
