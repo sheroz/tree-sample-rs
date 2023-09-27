@@ -191,13 +191,13 @@ impl BinaryTree {
         v.as_ref().map(|node| node.borrow().id)
     }
 
-    pub fn invert_recursive(node_ref: BinaryTreeNodeRef) {
+    pub fn invert_recursive(node_ref: &BinaryTreeNodeRef) {
         let mut node = node_ref.borrow_mut();
 
-        if let Some(right) = node.right.clone() {
+        if let Some(right) = &node.right {
             Self::invert_recursive(right);
         }
-        if let Some(left) = node.left.clone() {
+        if let Some(left) = &node.left {
             Self::invert_recursive(left);
         }
 
@@ -212,12 +212,11 @@ impl BinaryTree {
         queue.push_back(root_ref);
         while let Some(node_ref) = queue.pop_front() {
             let mut node = node_ref.borrow_mut();
-
-            if let Some(right) = node.right.clone() {
-                queue.push_back(right);
+            if let Some(right) = &node.right {
+                queue.push_back(right.clone());
             }
-            if let Some(left) = node.left.clone() {
-                queue.push_back(left);
+            if let Some(left) = &node.left {
+                queue.push_back(left.clone());
             }
 
             // swap child nodes
@@ -538,7 +537,7 @@ mod tests {
         ];
 
         let root = populate_balanced_binary_tree();
-        BinaryTree::invert_recursive(root.clone());
+        BinaryTree::invert_recursive(&root);
 
         let flatten_nodes: Vec<_> = BinaryTree::flatten_inorder(root.clone());
         assert_eq!(flatten_nodes.len(), expected.len());
