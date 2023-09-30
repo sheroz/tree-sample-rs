@@ -2,9 +2,15 @@
 
 Tree and parent-child relationship samples for learning purposes
 
-- [Generic Tree](src/generic_tree.rs)
 - [Binary Tree](src/binary_tree.rs)
+  - Traversal
+    - In-order
+  - Inverting
+    - Recursive
+    - Iterative
 - [Binary Search Tree](src/binary_search_tree.rs)
+  - Search
+- [Generic Tree](src/generic_tree.rs)
 
 ## Useful insights
 
