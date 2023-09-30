@@ -202,8 +202,8 @@ impl BinaryTree {
         }
 
         // swap child nodes
-        let tmp = node.right.clone();
-        node.right = node.left.clone();
+        let tmp = node.right.take();
+        node.right = node.left.take();
         node.left = tmp;
     }
 
@@ -220,8 +220,8 @@ impl BinaryTree {
             }
 
             // swap child nodes
-            let tmp = node.right.clone();
-            node.right = node.left.clone();
+            let tmp = node.right.take();
+            node.right = node.left.take();
             node.left = tmp;
         }
     }
